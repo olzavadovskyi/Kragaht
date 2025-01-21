@@ -1,0 +1,23 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Login - Kragaht{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="register-box">
+        <h2 class="register-title">Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            <button type="submit" class="submit-button">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

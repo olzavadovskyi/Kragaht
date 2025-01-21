@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kragaht</title>
+    <link rel="stylesheet" href="{% static 'posts/css/css_styles.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'posts/img/griff.png' %}"/>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="logo"><img src="{% static 'posts/img/griff.png' %}"></img></div>
+            <h1>Kragaht</h1>
+       <div class="header-center">
+    <form method="get" action="{% url 'posts:post_list' %}">
+        <input
+            type="text"
+            name="q"
+            class="search-box"
+            placeholder="Search posts..."
+            value="{{ query|default:'' }}"
+        >
+        <button type="submit" class="search-button">Search</button>
+    </form>
+</div>
+
+        <div class="header-right">
+            <button class="sign-in"><a href="{% url 'posts:user_register' %}"> Sign In</a></button>
+            {% if user.is_authenticated %}
+              <button class="sign-in"><a href="{% url 'posts:user_logout' %}"> Logout </a></button>
+            {% else %}
+            <button class="sign-in"><a href="{% url 'posts:user_login' %}"> Login</a></button>
+            {% endif %}
+        </div>
+    </header>
+    <div class="container">
+        <aside class="sidebar">
+            <ul class="sdb">
+                <li><a href="{% url 'posts:post_list' %}">Home</a></li>
+                <li class="category-item">
+                    <a href="#">Category</a>
+                    <div class="red-square"></div>
+                    <ul class="categories-dropdown" id="dropdownMenu">
+                        {% for category in categories %}
+                    <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                {% endfor %}
+                    </ul>
+                </li>
+                <li><a href="{% url 'posts:liked_posts' %}">Liked Posts</a></li>
+                <li><a href="{% url 'posts:my_posts' %}">My Posts</a></li>
+                {% if user.is_authenticated %}
+                <li> <a href="{% url 'posts:post_create' %}" class="category-item">Add New Post</a>
+    {% endif %}
+            </ul>
+        </aside>
+        <main class="content">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+    <script> <!-- dropdown of categories -->
+        document.addEventListener('DOMContentLoaded', function () {
+            const redSquare = document.querySelector('.red-square');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            redSquare.addEventListener('click', function () {
+                dropdownMenu.classList.toggle('visible');
+            });
+        });
+    </script>
+</body>
+</html>

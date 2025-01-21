@@ -1,0 +1,92 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Post List - Kragaht{% endblock %}
+
+{% block content %}
+<div class="post-container">
+    <div class="sort-options">
+        <form method="get" class="sort-form" action="{% url 'posts:post_list' %}">
+            <input type="hidden" name="q" value="{{ query|default:'' }}">
+
+            <label for="sort-select">Sort by:</label>
+            <select name="sort" id="sort-select">
+                <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
+                <option value="likes" {% if sort_by == 'likes' %}selected{% endif %}>Likes</option>
+                <option value="time_create" {% if sort_by == 'time_create' %}selected{% endif %}>Time of Creation</option>
+            </select>
+
+            <button type="submit" class="sort-button">Sort</button>
+        </form>
+    </div>
+    {% for post in posts %}
+        <div class="post-card">
+            <div class="post-image">
+                {% if post.photo %}
+                    <img src="{{ post.photo.url }}" alt="{{ post.title }}">
+                {% else %}
+                    <div class="placeholder-image"></div>
+                {% endif %}
+                <div class="read-post-container">
+                    <a href="{% url 'posts:post_detail' post.slug %}" class="read-post">Read Post</a>
+                    <div class="post-interactions">
+    <button class="like-button" data-id="{{ post.id }}">
+        {% if post.user_liked %}
+           &#9650;
+        {% else %}
+          &#9650;
+        {% endif %}
+    </button>
+    <span id="like-count-{{ post.id }}">{{ post.get_like_count }}</span>: Likes
+</div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-header">
+                    <div class="post-title">{{ post.title }}</div>
+                    <div class="post-meta">
+                        <span>Author: {{ post.author.username }}</span>
+                        <span>Date: {{ post.time_update|date:"d-m-Y H:i" }}</span>
+                    </div>
+                </div>
+                <div class="post-description">
+                    {{ post.content|truncatewords:20 }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- JavaScript AJAX Like System -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const likeButtons = document.querySelectorAll('.like-button');
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const postId = this.getAttribute('data-id');
+                const likeCountSpan = document.getElementById(`like-count-${postId}`);
+
+                fetch(`/post/${postId}/like/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.liked !== undefined) {
+                        this.innerHTML = data.liked ? '&#9650;' : '&#9650;';
+                        likeCountSpan.textContent = data.like_count;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+</script>
+{% endblock %}

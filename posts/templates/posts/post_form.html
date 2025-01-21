@@ -1,0 +1,31 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Create Post - Kragaht{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="register-box">
+        <h2 class="register-title">Create Post</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                {{ form.content.label_tag }}
+                {{ form.content }}
+            </div>
+            <div class="form-group">
+                {{ form.category.label_tag }}
+                {{ form.category }}
+            </div>
+            <div class="form-group">
+                {{ form.photo.label_tag }}
+                {{ form.photo }}
+            </div>
+            <button type="submit" class="submit-button">Create Post</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

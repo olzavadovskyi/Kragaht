@@ -1,0 +1,36 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}My Posts - Kragaht{% endblock %}
+
+{% block content %}
+<h2>Your Liked Posts</h2>
+<div class="post-container">
+    {% for post in posts %}
+        <div class="post-card">
+            <div class="post-image">
+                {% if post.photo %}
+                    <img src="{{ post.photo.url }}" alt="{{ post.title }}">
+                {% else %}
+                    <div class="placeholder-image"></div>
+                {% endif %}
+                <div class="read-post-container">
+                    <a href="{% url 'posts:post_detail' post.slug %}" class="read-post">Read Post</a>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-header">
+                    <div class="post-title">{{ post.title }}</div>
+                    <div class="post-meta">
+                        <span>Date: {{ post.time_update|date:"d-m-Y H:i" }}</span>
+                    </div>
+                </div>
+                <div class="post-description">
+                    {{ post.content|truncatewords:20 }}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+    <p>You haven't any liked posts yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

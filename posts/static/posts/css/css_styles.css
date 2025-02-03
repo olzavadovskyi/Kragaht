@@ -310,7 +310,18 @@ header {
         /* Post Content Section */
         .post-content {
             flex: 1;
+            line-height: 32px;
+            background: rgb(241 241 241);
+            padding-left: 10px;
+            padding-right: 10px;
         }
+
+        .post-cont-content {
+    flex: 1;
+    line-height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    }
 
         .post-header {
             display: flex;
@@ -324,6 +335,7 @@ header {
             color: white;
             padding: 5px;
             border-radius: 3px;
+            display: inline-block;
         }
 
         .post-meta span {
@@ -391,8 +403,8 @@ header {
 
 /* Black rectangle for post image */
 .post-image-wrapper {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     background-color: #000; /* Black background */
     display: flex;
     justify-content: center;
@@ -411,29 +423,45 @@ header {
 /* Main container for the post and similar posts */
 .post-container {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
     gap: 20px;
     margin-top: 20px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-form-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-direction: column;
+}
+
+.post-detail-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-direction: row;
 }
 
 /* Main Post Section */
 .main-post {
-    flex: 3; /* 75% of the width */
     padding: 15px;
     border-radius: 5px;
+    margin-left: 20px;
 }
 
 /* Similar Posts Section */
 .similar-posts {
-    flex: 1; /* Similar posts take up 25% of the width */
+    flex: 1;
     padding: 15px;
     border-radius: 5px;
-    margin-left: 100px;
+    margin-left: 80px;
+    margin-right: 20px;
 }
 
 .similar-posts h3 {
+    width: 120%
     margin-bottom: 10px;
     font-size: 1.2rem;
     color: #333;
@@ -495,10 +523,9 @@ header {
 
 label {
     display: block;
-    color: #fff;
     font-size: 1rem;
     margin-bottom: 5px;
-    box-shadow: black 1px 1px 1px 1px;
+    color: white;
 }
 
 .form-input {

@@ -52,9 +52,9 @@ def post_list(request):
     })
 
 
-def post_detail(request, post_slug):  # full post
+def post_detail(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
-    similar_posts = Post.objects.exclude(id=post.id)[:5]  # give 5 similar posts
+    similar_posts = Post.objects.exclude(id=post.id)[:5]
     categories = Category.objects.all()
     return render(request, 'posts/post_detail.html', {
         'post': post,
@@ -105,7 +105,7 @@ def post_create(request):
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user != post.author and not request.user.is_staff:
-        return redirect('posts:post_list')  # Redirect unauthorized users
+        return redirect('posts:post_list')
     categories = Category.objects.all()
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES, instance=post)

@@ -3,7 +3,9 @@
 {% block title %}Post List - Kragaht{% endblock %}
 
 {% block content %}
+<h2>You need to log in to be able to create/edit or like posts</h2>
 <div class="post-container">
+    <!-- Sorting Dropdown -->
     <div class="sort-options">
         <form method="get" class="sort-form" action="{% url 'posts:post_list' %}">
             <input type="hidden" name="q" value="{{ query|default:'' }}">
@@ -18,8 +20,10 @@
             <button type="submit" class="sort-button">Sort</button>
         </form>
     </div>
+
     {% for post in posts %}
         <div class="post-card">
+
             <div class="post-image">
                 {% if post.photo %}
                     <img src="{{ post.photo.url }}" alt="{{ post.title }}">
@@ -28,19 +32,23 @@
                 {% endif %}
                 <div class="read-post-container">
                     <a href="{% url 'posts:post_detail' post.slug %}" class="read-post">Read Post</a>
+
+                    <!-- Like System -->
                     <div class="post-interactions">
-    <button class="like-button" data-id="{{ post.id }}">
-        {% if post.user_liked %}
-           &#9650;
-        {% else %}
-          &#9650;
-        {% endif %}
-    </button>
-    <span id="like-count-{{ post.id }}">{{ post.get_like_count }}</span>: Likes
-</div>
+                        <button class="like-button" data-id="{{ post.id }}">
+                            {% if user.is_authenticated and post.user_liked %}
+                                &#9650; <!-- Arrow for Liked -->
+                            {% else %}
+                                &#9650; <!-- Another arrow for dislike -->
+                            {% endif %}
+                        </button>
+                        <span id="like-count-{{ post.id }}">{{ post.get_like_count }}</span>: Likes
+                    </div>
                 </div>
             </div>
-            <div class="post-content">
+
+            <!-- Post Content -->
+            <div class="post-cont-content">
                 <div class="post-header">
                     <div class="post-title">{{ post.title }}</div>
                     <div class="post-meta">
@@ -49,10 +57,12 @@
                     </div>
                 </div>
                 <div class="post-description">
-                    {{ post.content|truncatewords:20 }}
+                    {{ post.content|safe|truncatechars:150 }}
                 </div>
             </div>
         </div>
+    {% empty %}
+    <p>No posts available.</p>
     {% endfor %}
 </div>
 
@@ -60,6 +70,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const likeButtons = document.querySelectorAll('.like-button');
+
         likeButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const postId = this.getAttribute('data-id');

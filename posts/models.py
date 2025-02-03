@@ -1,3 +1,5 @@
+
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
@@ -18,7 +20,7 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
-    content = models.TextField()
+    content = RichTextField()  # CKEditor
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, blank=True, null=True)
     photo = models.ImageField(upload_to='post_photos/', blank=True, null=True)
@@ -38,11 +40,11 @@ class Post(models.Model):
         return reverse('posts:post_detail', kwargs={'post_slug': self.slug})
 
     def can_edit_or_delete(self, user):
-
         return user == self.author or user.is_staff
 
     def get_like_count(self):
         return self.likes.count()
 
     def user_liked(self, user):
-        return self.likes.filter(id=user.id).exists()  # Check if a user liked the post
+        return self.likes.filter(id=user.id).exists()
+

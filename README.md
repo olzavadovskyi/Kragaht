@@ -17,7 +17,7 @@ Kragaht is a **Django-based web application** for creating, managing, and browsi
 ## **📦 Installation**
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/Kragaht.git
+git clone https://github.com/olzavadovskyi/Kragaht.git
 cd Kragaht
 ```
 
